@@ -7,6 +7,10 @@ const { groupBy } = pkg;
 
 const app = Express();
 
+Axios.defaults.validateStatus = function() {
+    return true;
+  };
+
 /**
  * 
  * Activate CRM License and return sample share link
