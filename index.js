@@ -165,7 +165,7 @@ app.get("/calendar/deep/:token", async (req, res) => {
 /**
  * 
  * Calendar link with customer details. Only works if their is a Measure project associated with the opportunity.
- * This link is reasonably fast but is dependant on there being a Measure appointment to get customer details.
+ * This link is reasonably fast but is dependant on there being a Measure project to get customer details.
  */
 
 app.get("/calendar/measure/:token", async (req, res) => {
