@@ -33,7 +33,7 @@ app.get("/login", async (req, res) => {
         "username": email,
         "password": password,
         "appID": "crm",
-        "existingDeviceBehavior": 1
+        "existingDeviceBehavior": 2
     }
     const loginResponse = await Axios.post("https://api.measureflooring.com/api/checkout/activate", payload, headers);
     if (loginResponse.status === 200) {
@@ -59,13 +59,13 @@ app.get("/calendar/:token", async (req, res) => {
             salespersons = req.query.salesperson;
         }
 
-    let daysBefore = 14
-    let daysForward = 90
-    if (typeof (req.query.db) == "number") {
-        daysForward = req.query.db;
+    let daysBefore = ~~req.query.db;
+    let daysForward = ~~req.query.df;
+    if (daysBefore === undefined) {
+        daysForward = 14;
     }
-    if (typeof (req.query.df) == "number") {
-        daysForward = req.query.df;
+    if (daysForward === undefined) {
+        daysForward = 90;
     }
     const headers = {
         "headers": {
