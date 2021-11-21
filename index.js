@@ -61,11 +61,11 @@ app.get("/calendar/:token", async (req, res) => {
 
     let daysBefore = ~~req.query.db;
     let daysForward = ~~req.query.df;
-    if (daysBefore === undefined) {
-        daysForward = 14;
+    if (daysBefore === undefined || daysBefore === 0) {
+        daysBefore = 30;
     }
-    if (daysForward === undefined) {
-        daysForward = 90;
+    if (daysForward === undefined || daysForward === 0) {
+        daysForward = 365;
     }
     const headers = {
         "headers": {
@@ -87,7 +87,7 @@ app.get("/calendar/:token", async (req, res) => {
         calendar.createEvent({
             start: Moment(act.startTime),
             end: Moment(act.endTime),
-            summary: `${act.subject.toUpperCase()} - ${act.opportunityName}`,
+            summary: `${(act.subject ?? "").toUpperCase()} - ${act.opportunityName}`,
             description: `Assigned to: ${act.assigned}\n${act.details}`,
             categories: [{ name: `${act.assigned}` }]
         })
