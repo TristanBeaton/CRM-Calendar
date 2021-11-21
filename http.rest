@@ -1,6 +1,0 @@
-# GET http://localhost:5000/calendar/deep/2021-11-17T21:08:21-3544d5c4906f4012b1ace0bdf1af0676?salesperson=sales@smithsfloors.com.au
-# GET http://localhost:5000/calendar/deep/2021-11-17T21:08:21-3544d5c4906f4012b1ace0bdf1af0676
-
-# GET http://localhost:5000/calendar/deep/2021-11-16T21:24:26-28a2f3a0d8ce449dab4592efa896bced?salesperson=tbeaton@rfms.co.nz
-
-GET http://127.0.0.1:3000/
