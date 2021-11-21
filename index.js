@@ -7,6 +7,45 @@ const { groupBy } = pkg;
 
 const app = Express();
 
+/**
+ * 
+ * Activate CRM License and return sample share link
+ */
+app.get("/login", async (req, res) => {
+    const email = req.query.email;
+    const password = req.query.password;
+    if (email === undefined || email === "") {
+        throw Error("Email is required.");
+    }
+    if (password === undefined || password === "") {
+        throw Error("Password in required");
+    }
+    const headers = {
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+    const payload = {
+        "username": email,
+        "password": password,
+        "appID": "crm",
+        "existingDeviceBehavior": 1
+    }
+    const loginResponse = await Axios.post("https://api.measureflooring.com/api/checkout/activate", payload, headers);
+    if (loginResponse.status === 200) {
+        const userData = loginResponse.data;
+        let token = userData.PartitionKey;
+        res.send(`http://localhost:5000/calendar/${token}?salesperson=${userData.Email}&df=30&db=7`);
+    } else {
+        res.send(loginResponse.data);
+    }
+})
+
+/**
+ * 
+ * This returns a Calendar with the basic appointment data. No opportunity details included.
+ */
+
 app.get("/calendar/:token", async (req, res) => {
     let salespersons = []
     if (typeof (req.query.salesperson) === "undefined") { } else
@@ -52,6 +91,12 @@ app.get("/calendar/:token", async (req, res) => {
     console.log("finished");
     res.send(calendar.toString());
 })
+
+/**
+ * 
+ * Calendar link with customer phone email and address.
+ * This link is slower with all the extra calls to the RFMS API
+ */
 
 app.get("/calendar/deep/:token", async (req, res) => {
     try {
@@ -116,6 +161,12 @@ app.get("/calendar/deep/:token", async (req, res) => {
         res.status(500)
     }
 })
+
+/**
+ * 
+ * Calendar link with customer details. Only works if their is a Measure project associated with the opportunity.
+ * This link is reasonably fast but is dependant on there being a Measure appointment to get customer details.
+ */
 
 app.get("/calendar/measure/:token", async (req, res) => {
     try {
